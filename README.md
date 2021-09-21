@@ -1,5 +1,10 @@
 # xsltunit
 
+For complete description of this tool see
+[src/xsltunit.org/0/README.md](src/xsltunit.org/0/README.md)
+
+----
+
 ## Branch: develop
 
 The "develop" branch is for actively developed code. The initial code
@@ -49,3 +54,6 @@ The xslt code was copied from repo:
     git clone git@github.com:emilybache/GildedRose-Refactoring-Kata.git
     mv GildedRose-Refactoring-Kata/xslt/* .
     rm -rf GildedRose-Refactoring-Kata
+
+----
+
