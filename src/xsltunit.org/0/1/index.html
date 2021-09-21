@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//XML-DEV//DTD XHTML RDDL 1.0//EN" "http://www.rddl.org/rddl-xhtml.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rddl="http://www.rddl.org/" xml:lang="en">
+  <head>
+    <title>XSLTunit</title>
+    <link href="xrd.css" type="text/css" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>XSLTunit</h1>
+    <div id="head">
+      <p>This Version: <a href="index.html">V 0.1 (27 April 2001)</a>
+      </p>
+      <p>Latest Version: <a href="http://xsltunit.org/">http://xsltunit.org/</a>
+      </p>
+      <p>This namespace: <a href="../index.html">http://xsltunit.org/0/</a>
+      </p>
+      <p>Previous Version: none</p>
+      <p>XSLTunit 0.x is a proof of concept including this page, <a href="xsltunit.xsl">xsltunit.xsl</a> (a XSLT sheet that can be imported into transformation to perform unit tests on XSLT sheets) and a set of examples.</p>
+      <p>The description of the namespace version convention I intend to use for XSLTunit  has been <a href="http://lists.xml.org/archives/xml-dev/200103/msg00995.html">posted</a> for discussion on xml-dev.</p>
+      <p>Editor:</p>
+      <ul>
+        <li>
+          <a href="mailto:vdv@dyomedea.com">Eric van der Vlist</a>, <a href="http://dyomedea.com">Dyomedea</a>
+        </li>
+      </ul>
+    </div>
+    <div id="toc">
+      <h2>Table of contents</h2>
+      <ol>
+        <li>
+          <a href="index.html#purposes">Purposes</a>
+        </li>
+        <li>
+          <a href="index.html#limitations">Limitations</a>
+        </li>
+        <li>
+          <a href="index.html#tutorial">Tutorial</a>
+          <ol>
+            <li>
+              <a href="index.html#start">Getting started</a>
+            </li>
+            <li>
+              <a href="index.html#first">Our first test</a>
+            </li>
+            <li>
+              <a href="index.html#notEqual">Testing that values are not equal</a>
+            </li>
+            <li>
+              <a href="index.html#xpath">Testing XPath expressions</a>
+            </li>
+          </ol>
+        </li>
+        <li>
+          <a href="index.html#resources">Resources</a>
+        </li>
+        <li>
+          <a href="index.html#todo">To do</a>
+        </li>
+        <li>
+          <a href="index.html#acknowledgements">Acknowledgements</a>
+        </li>
+        <li>
+          <a href="index.html#history">History</a>
+        </li>
+        <li>
+          <a href="index.html#legal">Legal statement</a>
+        </li>
+      </ol>
+    </div>
+    <div id="purposes">
+      <h2>1. Purposes</h2>
+      <p>The purpose of XSLTunit is to provide a unit testing framework for XSLT transformations similar to the "*unit" environments available for other languages (i.e. Junit for Java).</p>
+      <p>Although not a general purpose programming language, XSLT is turing complete and allows to develop powerful (and complex) transformations that deserve unit testing.</p>
+    </div>
+    <div id="limitations">
+      <h2>2. Limitations</h2>
+      <p>The first limitation I have found is that stylesheets need to be slightly modified to test the template that is applied to the root element.</p>
+      <p>This is because the XSLT sheet running the test needs to define a template for the root document that will let it get control over the tests to run. After having taken control, this template has no way to invoke the template for root elements defined in the tested sheet that is imported and has a lower priority.</p>
+      <p>We will see that there is an easy workaround using modes, but the tested stylesheet has still to be edited.</p>
+    </div>
+    <div id="tutorial">
+      <h2>3. Tutorial</h2>
+      <div id="start">
+        <h3>3.1. Getting started.</h3>
+        <p>A XSLTunit set of tests is a XSLT transformation that imports the tested stylesheet and xsltunit.xsl, for instance:</p>
+        <pre>&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;xsl:stylesheet version="1.0" 
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+ xmlns:saxon="http://icl.com/saxon" 
+ xmlns:xsltu="http://xsltunit.org/0/" 
+ exclude-result-prefixes="saxon">
+  &lt;xsl:import href="library.xsl"/>
+  &lt;xsl:import href="xsltunit.xsl"/>
+  &lt;xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
+.../...
+&lt;/xsl:stylesheet>
+</pre>
+        <p>This example will be using a Saxon extension to convert result tree fragments into nodeset and that's the reason why we have included the declaration of the namespace for Saxon.</p>
+        <p>The XSLTunit namespace is used to identify modes and named templates belonging to XSLTunit as well as the vocabulary used by the test report.</p>
+        <p>This transformation will gain control (typically using a template on the document element) and generate the test report.</p>
+        <p>The document element of the test report will typically be xsltu:tests.</p>
+        <pre>  &lt;xsl:template match="/">
+    &lt;xsltu:tests>
+.../...
+    &lt;/xsltu:tests>
+  &lt;/xsl:template>
+</pre>
+      </div>
+      <div id="first">
+        <h3>3.2. Our first test</h3>
+        <p>Let's assume we want to test that the formatting of the title of a book described in a document will have a specific value. We will write this test as: :</p>
+        <pre>&lt;xsltu:test id="test-title">
+        &lt;xsl:call-template name="xsltu:assertEqual">
+          &lt;xsl:with-param name="id" select="'full-value'"/>
+          &lt;xsl:with-param name="nodes1">
+            &lt;xsl:apply-templates select="document('library.xml')/library/book[isbn='0836217462']/title"/>
+          &lt;/xsl:with-param>
+          &lt;xsl:with-param name="nodes2">
+            &lt;h1>Being a Dog Is a Full-Time Job&lt;/h1>
+          &lt;/xsl:with-param>
+        &lt;/xsl:call-template>
+      &lt;/xsltu:test></pre>
+        <p>The named template "xsltu:assertEqual" will compare the two parameters nodes1 (that will contain the result of the transformation of the title) and nodes2 (containing the expected value) and generate the report for this test using the id defined in its id parameter).</p>
+        <p>The result will be for instance (if the test passes):</p>
+        <pre>&lt;xsltu:test id="test-title">
+   &lt;xsltu:assert id="full-value" outcome="passed"/>
+&lt;/xsltu:test></pre>
+        <p>Or (if the test fails because the transformation has added a "!"):</p>
+        <pre>&lt;xsltu:test id="test-title">
+ &lt;xsltu:assert id="full-value" outcome="failed">
+   &lt;xsltu:message>
+      &lt;xsltu:diff name="">
+         &lt;xsltu:diff name="h1">
+            &lt;xsltu:no-match>
+               &lt;xsltu:node>Being a Dog Is a Full-Time Job!&lt;/xsltu:node>
+               &lt;xsltu:node>Being a Dog Is a Full-Time Job&lt;/xsltu:node>
+            &lt;/xsltu:no-match>
+         &lt;/xsltu:diff>
+      &lt;/xsltu:diff>
+   &lt;/xsltu:message>
+ &lt;/xsltu:assert>
+&lt;/xsltu:test></pre>
+      </div>
+      <div id="notEqual">
+        <h3>3.3. Testing that values are not equal</h3>
+        <p>The test can also be reverted and we can test that two variables are different, for instance if we wanted to test that the result will not be an empty h1 element:</p>
+        <pre>      &lt;xsltu:test id="test-title-reverted">
+        &lt;xsl:call-template name="xsltu:assertNotEqual">
+          &lt;xsl:with-param name="id" select="'non-empty-h1'"/>
+          &lt;xsl:with-param name="nodes1">
+            &lt;xsl:apply-templates select="document('library.xml')/library/book[isbn='0836217462']/title"/>
+          &lt;/xsl:with-param>
+          &lt;xsl:with-param name="nodes2">
+            &lt;h1/>
+          &lt;/xsl:with-param>
+        &lt;/xsl:call-template>
+      &lt;/xsltu:test></pre>
+      </div>
+      <div id="xpath">
+        <h3>3.4. Testing XPath expressions</h3>
+        <p>For those situations that require more flexibility, XPath expressions can be tested using the xsltu:assert named pattern, for instance:</p>
+        <pre>      &lt;xsltu:test id="XPath-expressions">
+        &lt;xsl:variable name="source">
+          &lt;title>My title&lt;/title>
+        &lt;/xsl:variable>
+        &lt;xsl:variable name="result-rtf">
+          &lt;xsl:apply-templates select="saxon:nodeSet($source)/title"/>
+        &lt;/xsl:variable>
+        &lt;xsl:variable name="result" select="saxon:nodeSet($result-rtf)"/>
+        &lt;xsl:call-template name="xsltu:assert">
+          &lt;xsl:with-param name="id" select="'h1'"/>
+          &lt;xsl:with-param name="test" select="$result/h1"/>
+          &lt;xsl:with-param name="message">This should be a h1!&lt;/xsl:with-param>
+        &lt;/xsl:call-template>
+        &lt;xsl:call-template name="xsltu:assert">
+          &lt;xsl:with-param name="id" select="'value'"/>
+          &lt;xsl:with-param name="test" select="$result/h1=$source"/>
+          &lt;xsl:with-param name="message">h1 is "&lt;xsl:value-of select="$result/h1"/>"&lt;/xsl:with-param>
+        &lt;/xsl:call-template>
+      &lt;/xsltu:test></pre>
+      </div>
+    </div>
+    <div id="resources">
+      <h2>4. Resources
+      </h2>
+      <p>This documentation has been written as a <a href="http://www.rddl.org">RDDL</a> document and this section will be developed to include more resources related to XSLTunit.</p>
+      <rddl:resource id="xsltunit" xlink:arcrole="http://www.w3.org/1999/XSL/Transform" xlink:role="http://www.w3.org/1999/XSL/Transform" xlink:title="XSLTunit library" xlink:href="xsltunit.xsl">
+        <div class="resource">
+          <h4>XSLTunit library</h4>
+          <p>This <a href="xsltunit.xsl">library</a> is imported into XSLTunit sets of tests.</p>
+          <p>This release must be run using Saxon. </p>
+        </div>
+      </rddl:resource>
+      <rddl:resource id="xsltunit-xsl-example" xlink:arcrole="#example" xlink:role="http://www.w3.org/1999/XSL/Transform" xlink:title="XSLTunit example" xlink:href="tst_library.xsl">
+        <div class="resource">
+          <h4>XSLTunit example</h4>
+          <p>This <a href="tst_library.xsl">XSLT unit suite</a> is the one that is decribed in the tutorial.</p>
+        </div>
+      </rddl:resource>
+      <rddl:resource id="lib-example" xlink:arcrole="#example" xlink:role="http://www.w3.org/TR/REC-xml" xlink:title="Library example" xlink:href="library.xml">
+        <div class="resource">
+          <h4>Library instance document</h4>
+          <p>This <a href="library.xml">instance document</a> is used as an example in the tutorial.</p>
+        </div>
+      </rddl:resource>
+      <rddl:resource id="lib-xsl-example" xlink:arcrole="#example" xlink:role="http://www.w3.org/1999/XSL/Transform" xlink:title="Library XSLT example" xlink:href="library.xsl">
+        <div class="resource">
+          <h4>Library XSLT transformation.</h4>
+          <p>This <a href="library.xsl">transformation</a> is the one that is tested in the tutorial.</p>
+        </div>
+      </rddl:resource>
+      <rddl:resource id="CSS" xlink:title="CSS Stylesheet" xlink:role="http://www.isi.edu/in-notes/iana/assignments/media-types/text/css" xlink:href="xrd.css">
+        <div class="resource">
+          <h4>CSS Stylesheet</h4>
+          <p>A <a href="xrd.css">CSS stylesheet</a> borrowed from RDDL used to provide the &quot;look-and-feel&quot;
+of this document, suitable in general for RDDL documents.</p>
+        </div>
+      </rddl:resource>
+      <rddl:resource id="RDDLCSS" xlink:title="CSS Stylesheet" xlink:role="http://www.isi.edu/in-notes/iana/assignments/media-types/text/css" xlink:href="http://www.rddl.org/xrd.css">
+        <div class="resource">
+          <h4>CSS Stylesheet (original).</h4>
+          <p>Original version of the previous <a href="http://www.rddl.org/xrd.css">CSS stylesheet</a> on rddl.org.</p>
+        </div>
+      </rddl:resource>
+    </div>
+    <div id="todo">
+      <h2>5. To do</h2>
+      <p>I have been pleasantly surprised after a couple of hours working on XSLTunit that this simple tool was beginning to be useful while still very simple (or simplistic).</p>
+      <p>The current version is already a powerful tool that can be used to perform XSLT unit testing (and XSLTunit has been used to test the XSLTunit library).</p>
+      <p>This being said, the simplicity of the tools is leaving room for many applications and extensions on which your <a href="mailto:vdv@dyomedea.com">feedback</a> is welcome:</p>
+      <ol>
+        <li>Portability: develop versions that can run with other XSLT processors.</li>
+      </ol>
+    </div>
+    <div id="quotes">
+      <h2>6. Quotes</h2>
+      <p>TBD
+<br />
+      </p>
+    </div>
+    <div id="acknowledgements">
+      <h2>6. Acknowledgements</h2>
+      <p>Many thanks to the many people that have given me hints, ideas or encouragements.</p>
+      <p>Non normative list (by chronological order): Robert Martin, James Grenning, Chuck Allison, Chet Hendricksen, Ron Jeffries, Leigh Dodds, Matt Sergeant.</p>
+    </div>
+    <div id="history">
+      <h2>7. History</h2>
+      <rddl:resource id="v0.1" xlink:arcrole="http://www.rddl.org/purposes#prior-version" xlink:role="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict" xlink:href="/0/1/">
+        <div class="resource">
+          <h3>
+            <a href="index.html">V0.1</a>
+          </h3>
+          <ul>
+            <li>Creation</li>
+          </ul>
+        </div>
+      </rddl:resource>
+    </div>
+    <div id="legal">
+      <h2>8. Legal Statement</h2>
+      <p>Copyright (c) 2001 Eric van der Vlist</p>
+      <p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+``Software''), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+      <ol>
+        <li>The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+</li>
+        <li>The name of the authors when specified in the source files shall be 
+kept unmodified.</li>
+      </ol>
+      <p>THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL ERIC VAN DER VLIST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+    </div>
+  </body>
+</html>

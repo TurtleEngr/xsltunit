@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<library>
+<book>
+<isbn>0836217462</isbn>
+<title>Being a Dog Is a Full-Time Job</title>
+<author>
+<name>Charles M. Schulz</name>
+<nickName>SPARKY</nickName>
+<born>November 26, 1922</born>
+<dead>February 12, 2000</dead>
+</author>
+<character>
+<name>Peppermint Patty</name>
+<since>Aug. 22, 1966</since>
+<qualification>bold, brash and tomboyish</qualification>
+</character>
+<character>
+<name>Snoopy</name>
+<since>October 4, 1950</since>
+<qualification>extroverted beagle</qualification>
+</character>
+<character>
+<name>Schroeder</name>
+<since>May 30, 1951</since>
+<qualification>brought classical music to the Peanuts strip</qualification>
+</character>
+<character>
+<name>Lucy</name>
+<since>March 3, 1952</since>
+<qualification>bossy, crabby and selfish</qualification>
+</character>
+</book>
+<book>
+<isbn>0805033106</isbn>
+<title>Peanuts Every Sunday </title>
+<author>
+<name>Charles M. Schulz</name>
+<nickName>SPARKY</nickName>
+<born>November 26, 1922</born>
+<dead>February 12, 2000</dead>
+</author>
+<character>
+<name>Sally Brown</name>
+<since>Aug, 22, 1960</since>
+<qualification>always looks for the easy way out</qualification>
+</character>
+<character>
+<name>Snoopy</name>
+<since>October 4, 1950</since>
+<qualification>extroverted beagle</qualification>
+</character>
+<character>
+<name>Linus</name>
+<since>Sept. 19, 1952</since>
+<qualification>the intellectual of the gang</qualification>
+</character>
+<character>
+<name>Lucy</name>
+<since>March 3, 1952</since>
+<qualification>bossy, crabby and selfish</qualification>
+</character>
+</book>
+</library>
