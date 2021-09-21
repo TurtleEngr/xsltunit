@@ -184,7 +184,7 @@ can be tested using the xsltu:assert named pattern, for instance:
 
 ## 4. Resources
 
-#### XSLTunit library
+### 4.1 XSLTunit library
     
 This "XSLTunit library" (`library.xsl`) is imported into XSLTunit sets
 of tests.
@@ -192,28 +192,28 @@ of tests.
 This release must be run using a EXSLT compliant XSLT processor (such
 as Saxon, libxslt, 4xslt, Xalan-J, ...).
 
-#### XSLTunit example</h4>
+### 4.2 XSLTunit example</h4>
     
 This "XSLT unit suite" (`tst_library.xsl`) is the one that is decribed
 in the tutorial.
       
-#### Library instance document
+### 4.3 Library instance document
     
 This "instance document" (`library.xml`) is used as an example in the
 tutorial.
 
-#### Library XSLT transformation.
+### 4.4 Library XSLT transformation.
     
 This "transformation" (`library.xsl`) is the one that is tested in the
 tutorial.
 
-#### CSS Stylesheet
+### 4.5 CSS Stylesheet
     
 A "CSS stylesheet" (`xrd.css`) borrowed from RDDL used to provide the
 &quot;look-and-feel&quot; of this document, suitable in general for
 RDDL documents.
 
-#### CSS Stylesheet (original)
+### 4.6 CSS Stylesheet (original)
     
 Original version of the previous
 [CSS stylesheet](http://www.rddl.org/xrd.css) on rddl.org.
@@ -221,7 +221,6 @@ Original version of the previous
 ----
 
 ## 5. To do
-
 
 I have been pleasantly surprised after a couple of hours working on
 XSLTunit that this simple tool was beginning to be useful while still
