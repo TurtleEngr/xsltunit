@@ -26,14 +26,14 @@ This is a XSLT 1.0 port of the **Gilded-Rose-Kata**.
 created. One that lists all passed and failed tests, and another that
 only lists failed tests.
 
-- **make run-test** and **make report** targets can be refactored to run
+- `make run-test` and `make report` targets can be refactored to run
 multiple test suites.
 
-- **make validate** uses xmllint to verify the xml files are valid and
+- `make validate` uses xmllint to verify the xml files are valid and
 that DTD is being followed.
 
-- **make reformat** uses xmllint to reformat the xml and xsl code so
+- `make reformat` uses xmllint to reformat the xml and xsl code so
 they have a constant format. Blank lines are added (with an awk
 script) after "template" and "when" elements.
 
-- **make clean** will remove all of the generated files.
+- `make clean` will remove all of the generated files.
