@@ -59,15 +59,15 @@ tested stylesheet and xsltunit.xsl, for instance:
     <?xml version="1.0" encoding="UTF-8"?>
     <xsl:stylesheet version="1.0"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-      	xmlns:exsl="http://exslt.org/common"
-      	extension-element-prefixes="exsl"
-      	xmlns:xsltu="http://xsltunit.org/0/"
-      	exclude-result-prefixes="exsl">
-	
-      	<xsl:import href="library.xsl"/>
-      	<xsl:import href="xsltunit.xsl"/>
-      	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
-      	.../...
+        xmlns:exsl="http://exslt.org/common"
+        extension-element-prefixes="exsl"
+        xmlns:xsltu="http://xsltunit.org/0/"
+        exclude-result-prefixes="exsl">
+        
+        <xsl:import href="library.xsl"/>
+        <xsl:import href="xsltunit.xsl"/>
+        <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
+        .../...
     </xsl:stylesheet>
 
 This example will be using a EXSLT extension to convert result tree
@@ -123,12 +123,12 @@ Or (if the test fails because the transformation has added a "!"):
 <xsltu:test id="test-title">
     <xsltu:assert id="full-value" outcome="failed">
         <xsltu:message>
-      	    <xsltu:diff name="">
+            <xsltu:diff name="">
                 <xsltu:diff name="h1">
-            	    <xsltu:no-match>
-               	        <xsltu:node>Being a Dog Is a Full-Time Job!</xsltu:node>
-               		<xsltu:node>Being a Dog Is a Full-Time Job</xsltu:node>
-            	    </xsltu:no-match>
+                    <xsltu:no-match>
+                        <xsltu:node>Being a Dog Is a Full-Time Job!</xsltu:node>
+                        <xsltu:node>Being a Dog Is a Full-Time Job</xsltu:node>
+                    </xsltu:no-match>
                 </xsltu:diff>
             </xsltu:diff>
         </xsltu:message>
@@ -175,8 +175,8 @@ can be tested using the xsltu:assert named pattern, for instance:
             <xsl:with-param name="id" select="'value'"/>
             <xsl:with-param name="test" select="$result/h1=$source"/>
             <xsl:with-param name="message">
-	        h1 is "<xsl:value-of select="$result/h1"/>"
-	    </xsl:with-param>
+                h1 is "<xsl:value-of select="$result/h1"/>"
+            </xsl:with-param>
         </xsl:call-template>
     </xsltu:test>
 
