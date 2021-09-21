@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" 
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:exsl="http://exslt.org/common" 
-	extension-element-prefixes="exsl"
-	xmlns:xsltu="http://xsltunit.org/0/" 
-	exclude-result-prefixes="exsl">
-
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:exsl="http://exslt.org/common" xmlns:xsltu="http://xsltunit.org/0/" version="1.0" extension-element-prefixes="exsl" exclude-result-prefixes="exsl">
   <xsl:template name="xsltu:assertEqual">
     <xsl:param name="id"/>
     <xsl:param name="nodes1"/>
@@ -22,6 +16,7 @@
       <xsl:with-param name="message" select="exsl:node-set($result)"/>
     </xsl:call-template>
   </xsl:template>
+ 
   <xsl:template name="xsltu:assertNotEqual">
     <xsl:param name="id"/>
     <xsl:param name="nodes1"/>
@@ -38,6 +33,7 @@
       <xsl:with-param name="message">Should have been different!</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+ 
   <xsl:template name="xsltu:assert">
     <xsl:param name="id"/>
     <xsl:param name="test"/>
@@ -47,6 +43,7 @@
         <xsl:when test="$test">
           <xsl:attribute name="outcome">passed</xsl:attribute>
         </xsl:when>
+ 
         <xsl:otherwise>
           <xsl:attribute name="outcome">failed</xsl:attribute>
           <xsltu:message>
@@ -56,6 +53,7 @@
       </xsl:choose>
     </xsltu:assert>
   </xsl:template>
+ 
   <xsl:template name="xsltu:diff">
     <xsl:param name="nodes1"/>
     <xsl:param name="nodes2"/>
@@ -71,6 +69,7 @@
             </xsltu:node>
           </xsltu:no-match>
         </xsl:when>
+ 
         <xsl:when test="count($nodes1/@*) != count($nodes2/@*)">
           <xsltu:no-match diff="number of children attributes ({count($nodes1/@*)} versus {count($nodes2/@*)} )">
             <xsltu:node>
@@ -81,6 +80,7 @@
             </xsltu:node>
           </xsltu:no-match>
         </xsl:when>
+ 
         <xsl:when test="count($nodes1/*) != count($nodes2/*)">
           <xsltu:no-match diff="number of children elements ({count($nodes1/*)} versus {count($nodes2/*)} )">
             <xsltu:node>
@@ -91,6 +91,7 @@
             </xsltu:node>
           </xsltu:no-match>
         </xsl:when>
+ 
         <xsl:when test="count($nodes1/text()) != count($nodes2/text())">
           <xsltu:no-match diff="number of children text nodes ({count($nodes1/text())} versus {count($nodes2/text())} )">
             <xsltu:node>
@@ -101,6 +102,7 @@
             </xsltu:node>
           </xsltu:no-match>
         </xsl:when>
+ 
         <xsl:otherwise>
           <xsl:apply-templates select="$nodes1/@*" mode="xsltu:diff">
             <xsl:with-param name="nodes2" select="$nodes2"/>
@@ -115,6 +117,7 @@
       </xsl:choose>
     </xsltu:diff>
   </xsl:template>
+ 
   <xsl:template match="*" mode="xsltu:diff">
     <xsl:param name="pos" select="position()"/>
     <xsl:param name="nodes2"/>
@@ -124,6 +127,7 @@
       <xsl:with-param name="nodes2" select="$node2"/>
     </xsl:call-template>
   </xsl:template>
+ 
   <xsl:template match="text()" mode="xsltu:diff">
     <xsl:param name="current" select="."/>
     <xsl:param name="pos" select="position()"/>
@@ -140,6 +144,7 @@
       </xsltu:no-match>
     </xsl:if>
   </xsl:template>
+ 
   <xsl:template match="@*" mode="xsltu:diff">
     <xsl:param name="current" select="."/>
     <xsl:param name="nodes2"/>
@@ -155,4 +160,5 @@
       </xsltu:no-match>
     </xsl:if>
   </xsl:template>
+ 
 </xsl:stylesheet>

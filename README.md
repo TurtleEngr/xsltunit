@@ -21,7 +21,7 @@ The "archive" branch documents the original source for xsltunit and example2.
 
 ### src/xsltunit Source
 
-The initial code came from http://xsltunit.org/0/
+The initial code came from [xsltunit.org](http://xsltunit.org/0/)
 See src/xsltunit.org/0/index.html for the 
 
     mkdir src
@@ -39,10 +39,10 @@ This example initially came from src/xsltunit.org/0/
 ### doc/example2/ Source
 
 This example code comes from this Kata:
-https://kata-log.rocks/gilded-rose-kata
+[kata-log.rocks/gilded-rose-kata](https://kata-log.rocks/gilded-rose-kata)
 
-The xslt code was copied from the github repo:
-emilybache/GildedRose-Refactoring-Kata with the following steps.
+The xslt code was copied from repo:
+[github](https://github.com/emilybache/GildedRose-Refactoring-Kata/tree/main/xslt)
 
     mkdir -p doc/example2
     cd doc/example2
