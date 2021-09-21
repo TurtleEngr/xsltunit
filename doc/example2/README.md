@@ -1,4 +1,4 @@
-# XSLT port of the Gilded-Rose Kata
+# Example 2 - XSLT port of the Gilded-Rose Kata
 
 This is a XSLT 1.0 port of the **Gilded-Rose-Kata**.
 
@@ -20,7 +20,7 @@ This is a XSLT 1.0 port of the **Gilded-Rose-Kata**.
 
 ----
 
-** Building and testing with Makefile
+## Building and testing with Makefile
 
 **make test** - this is the top test. Two report files are
 created. One that lists all passed and failed tests, and another that
